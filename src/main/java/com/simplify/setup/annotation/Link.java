@@ -19,14 +19,15 @@ public @interface Link {
     String methodName();
 
     /**
-     * 目标方法的参数列表
+     * 目标方法的参数列表(和当前实体类中的成员属性对应)
      * @return
      */
-    String[] methodParam();
+    String[] methodParam() default {};
 
     /**
      * 关联的目标字段
+     * 如果为默认值"",即直接将结果集赋值给该字段
      * @return
      */
-    String targetField();
+    String targetField() default "";
 }
