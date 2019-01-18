@@ -1,6 +1,7 @@
 package com.simplify.setup.support;
 
 import com.simplify.setup.annotation.Link;
+import com.simplify.setup.util.BeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -9,6 +10,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 /**
@@ -54,17 +56,23 @@ public class LinkResolve implements ApplicationContextAware {
                     log.warn("{}没有对应的实例对象",beanClass.getName());
                     return;
                 }
+                //todo 目前方法的参数都来至于实体类中的成员属性
                 String[] param = link.methodParam();
                 if(param.length != 0) {
                     //todo 待处理 参数字段非空
+                    try {
+                        Class<?>[] fieldClasses = BeanUtil.getClassType(cls,param);
+                        //获取目前实体中,指定的方法
+                        Method method = beanClass.getMethod(link.methodName(), fieldClasses);
+                        //从实体类中，获取参数的具体数据
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
 
     }
-
-
-
 
 }
