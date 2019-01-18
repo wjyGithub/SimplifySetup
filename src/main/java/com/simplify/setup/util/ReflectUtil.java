@@ -6,4 +6,8 @@ package com.simplify.setup.util;
  * @date 2019/1/14 23:43
  */
 public class ReflectUtil {
+
+    private ReflectUtil(){}
+
+
 }
