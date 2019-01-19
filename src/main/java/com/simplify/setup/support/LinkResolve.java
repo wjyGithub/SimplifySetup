@@ -8,8 +8,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
-
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
@@ -64,8 +64,16 @@ public class LinkResolve implements ApplicationContextAware {
                         Class<?>[] fieldClasses = BeanUtil.getClassType(cls,param);
                         //获取目前实体中,指定的方法
                         Method method = beanClass.getMethod(link.methodName(), fieldClasses);
+
                         //从实体类中，获取参数的具体数据
-                    } catch (NoSuchMethodException e) {
+                        for(Object obj : cols) {
+                            Object[] args = BeanUtil.getFieldValue(obj, param);
+                            //todo 需要考虑结果集是否为List
+                            Object result = method.invoke(obj, args);
+                        }
+
+
+                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                         e.printStackTrace();
                     }
                 }

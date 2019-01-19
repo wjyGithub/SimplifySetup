@@ -19,4 +19,19 @@ public class BeanUtilTest {
             System.out.println(clazz.getName());
         }
     }
+
+    @Test
+    public void getFieldValueTest(){
+
+        BeanTest beanTest = new BeanTest();
+        //beanTest.setId(1L);
+        beanTest.setAge(null);
+        beanTest.setUserName("");
+
+        Object[] fieldValues = BeanUtil.getFieldValue(beanTest, new String[]{"id", "userName","age"});
+        System.out.println("fieldValues数组长度:" + fieldValues.length);
+        for(Object obj : fieldValues) {
+            System.out.println(obj);
+        }
+    }
 }
