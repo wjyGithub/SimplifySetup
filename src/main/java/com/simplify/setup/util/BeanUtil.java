@@ -1,9 +1,8 @@
 package com.simplify.setup.util;
 
-import com.simplify.setup.Exception.IllegalFieldException;
+import com.simplify.setup.exception.IllegalFieldException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +71,6 @@ public class BeanUtil {
                 log.error("getFieldValue:{}",e);
                 throw new IllegalFieldException(ILLEGAL_FIELD_MESSAGE);
             }
-
         }
         return fieldValues.toArray(new Object[fieldValues.size()]);
     }

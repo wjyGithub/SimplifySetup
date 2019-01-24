@@ -1,10 +1,17 @@
 package com.simplify.setup.annotation;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  *  用于指定关联的目标字段
  * @author jianyuan.wei@hand-china.com
  * @date 2019/1/14 22:35
  */
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Link {
 
     /**

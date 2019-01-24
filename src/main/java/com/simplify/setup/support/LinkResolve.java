@@ -8,10 +8,12 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 注解@Link解析器
@@ -33,6 +35,7 @@ public class LinkResolve implements ApplicationContextAware {
     }
 
     //todo 用于处理解析 参数待定
+    //todo 考虑下如何通过缓存优化代码性能
     public void setFieldValueForCollection(Collection cols){
 
         if(cols == null || cols.isEmpty()) {
@@ -69,12 +72,24 @@ public class LinkResolve implements ApplicationContextAware {
                         for(Object obj : cols) {
                             Object[] args = BeanUtil.getFieldValue(obj, param);
                             //todo 需要考虑结果集是否为List
-                            Object result = method.invoke(obj, args);
+                            Object result = method.invoke(bean, args);
+
+                            //targetField是空的,且结果集为List  表示需要将结果集设置进去
+                            if(result != null && StringUtils.isEmpty(link.targetField()) && result instanceof List) {
+                                field.set(obj,result);
+                            }
+                            //非空 说明返回的结果集并不是集合,而是某一个实体类
+                            if(result != null && !StringUtils.isEmpty(link.targetField())) {
+
+                                Field resultField = result.getClass().getDeclaredField(link.targetField());
+                                resultField.setAccessible(true);
+                                Object value = resultField.get(result);
+                                field.set(obj,value);
+                            }
                         }
 
-
-                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                        e.printStackTrace();
+                    } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                       log.error("解析出错:",e);
                     }
                 }
             }

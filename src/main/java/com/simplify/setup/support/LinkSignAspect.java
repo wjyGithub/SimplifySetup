@@ -4,7 +4,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import java.util.Collection;
 
 /** 用于@LinkSign注解的处理
  * @author jianyuan.wei@hand-china.com
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Aspect
+@Order(1)
 public class LinkSignAspect {
 
 
@@ -22,8 +25,17 @@ public class LinkSignAspect {
     public Object processLinkSign(ProceedingJoinPoint pjp) throws Throwable{
 
         //todo 具体的处理
+        // 如果返回结果并非为集合  而是单个实体类 需要考虑重新处理方式
+        Object obj = pjp.proceed();
+        if(obj instanceof Collection) {
+            Collection cols = (Collection) obj;
+            linkResolve.setFieldValueForCollection(cols);
+        } else {
+            //todo 单个实体类
+            /*Collection cols = Arrays.asList(obj);
+            linkResolve.setFieldValueForCollection(cols);*/
+        }
 
-
-        return null;
+        return obj;
     }
 }

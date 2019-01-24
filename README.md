@@ -44,3 +44,19 @@
     }
 如上所示: 该框架所要解决的就是这一类业务场景问题,将代码的耦合度进一步降低，同时减少这类代码的重复编写
 ```
+
+用法:
+1. 拉取下工程执行  mvn clean install -U 打成jar包
+2.  添加依赖
+```$xslt
+<dependency>
+   <groupId>com.simplify</groupId>
+   <artifactId>setup</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+</dependency>
+
+```
+3. 在项目工程的启动入口添加如下配置(用于扫描该jar包下的注解)
+```$xslt
+@ComponentScan(basePackages = {"com.simplify.setup"})
+```
