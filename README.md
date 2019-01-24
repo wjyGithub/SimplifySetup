@@ -47,7 +47,7 @@
 
 用法:
 1. 拉取下工程执行  mvn clean install -U 打成jar包
-2.  添加依赖
+2. 在项目工程的pom.xml中添加如下依赖
 ```$xslt
 <dependency>
    <groupId>com.simplify</groupId>
