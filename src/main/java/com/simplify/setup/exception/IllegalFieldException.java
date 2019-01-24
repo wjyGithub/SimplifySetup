@@ -1,4 +1,4 @@
-package com.simplify.setup.Exception;
+package com.simplify.setup.exception;
 
 /**
  * 不合法的字段异常
